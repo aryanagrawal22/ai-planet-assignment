@@ -10,7 +10,7 @@ from pytz import UTC
 from submissions.models import Submission
 from submissions.serializers import SubmissionSerializer
 
-@api_view(['GET'])
+@api_view(['POST'])
 @is_authenticated
 def create_submission(request):
     try:
