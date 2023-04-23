@@ -9,6 +9,7 @@ class Submission(models.Model):
     hackathon = models.ForeignKey(Hackathon, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     summary = models.CharField(max_length=255)
+    details = models.JSONField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

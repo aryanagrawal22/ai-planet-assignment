@@ -33,11 +33,30 @@ def create_submission(request):
         if not HackathonRegister.objects.filter(Q(Q(user=user)&Q(hackathon=hackathon))).exists():
             return Response({'error': "User not registered to hackathon"}, status=status.HTTP_400_BAD_REQUEST)
         
+        submission_type = hackathon.submission_type
+        
+        if submission_type=="LINK":
+            submission_link = request.data.get('submission_link')
+            if not submission_link:
+                return Response({'error': "Enter a submission link"}, status=status.HTTP_400_BAD_REQUEST)
+            details = {"submission_type":"LINK", "submission_link":submission_link}
+        elif submission_type=="FILE":
+            submission_link = request.data.get('submission_link')
+            if not submission_link:
+                return Response({'error': "Enter a submission link"}, status=status.HTTP_400_BAD_REQUEST)
+            details = {"submission_type":"FILE", "submission_link":submission_link}
+        elif submission_type=="IMAGE":
+            submission_link = request.data.get('submission_link')
+            if not submission_link:
+                return Response({'error': "Enter a submission link"}, status=status.HTTP_400_BAD_REQUEST)
+            details = {"submission_type":"IMAGE", "submission_link":submission_link}
+        
         Submission.objects.create(
                     title=title,
                     summary=summary,
                     hackathon=hackathon,
                     user=user,
+                    details=details,
                 )
         return Response("Submission Created", status=status.HTTP_200_OK)
     

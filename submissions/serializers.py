@@ -9,7 +9,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Submission
-        fields = ['id','title', 'summary','created_at','user','hackathon']
+        fields = ['id','title', 'summary','created_at','user','hackathon','details']
         
     def get_hackathon(self, obj):
         return HackathonSerializer(obj.hackathon, many=False).data

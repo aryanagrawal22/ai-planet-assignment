@@ -3,6 +3,12 @@ from users.models import User
 import uuid
 
 class Hackathon(models.Model):
+    SUBMISSION_TYPE_CHOICES = [
+        ("IMAGE", "Image"),
+        ("FILE", "File"),
+        ("LINK", "Link"),
+    ]
+    
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     title = models.CharField(max_length=255, unique=True)
     description = models.CharField(max_length=255, null=True, blank=True)
@@ -11,6 +17,9 @@ class Hackathon(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     reward_prize = models.CharField(max_length=255, null=True, blank=True)
+    submission_type = models.CharField(
+        max_length=20, choices=SUBMISSION_TYPE_CHOICES, default="LINK"
+    )
 
     class Meta:
         db_table = "hackathons"
