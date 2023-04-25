@@ -5,6 +5,8 @@ from rest_framework import status
 from users.models import User
 from utility.encrytionHelper import EncryptionHelper
 from utility.authMiddleware import is_authenticated
+from hackathons.models import HackathonRegister
+from users.serializers import UserSerializer
 
 @api_view(['POST'])
 def register(request):
@@ -74,3 +76,16 @@ def login(request):
 @is_authenticated
 def check_profile(request):
     return Response(str(request.user))
+
+
+# LOGIC: Get registerd users list and then check in users table if it exists in the list to get atleast 1 registered user
+@api_view(['GET'])
+@is_authenticated
+def get_atleast_one_registered_users(request):
+    try:
+        registered_users = HackathonRegister.objects.all().values_list('user', flat=True)
+        user = User.objects.filter(user_id__in=registered_users).order_by("-created_at")
+        response = UserSerializer(user, many=True).data
+        return Response(response, status=status.HTTP_200_OK)
+    except Exception as exception:
+        return Response({'error': str(exception)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
