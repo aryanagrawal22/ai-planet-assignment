@@ -34,7 +34,7 @@ class Hackathon(models.Model):
 class HackathonRegister(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     hackathon = models.ForeignKey(Hackathon, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_rel')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

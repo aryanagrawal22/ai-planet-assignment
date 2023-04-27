@@ -83,9 +83,10 @@ def check_profile(request):
 @is_authenticated
 def get_atleast_one_registered_users(request):
     try:
-        registered_users = HackathonRegister.objects.all().values_list('user', flat=True)
-        user = User.objects.filter(user_id__in=registered_users).order_by("-created_at")
-        response = UserSerializer(user, many=True).data
+        registered_users = User.objects.filter(
+            user_rel__id__isnull=False
+        ).distinct()
+        response = UserSerializer(registered_users, many=True).data
         return Response(response, status=status.HTTP_200_OK)
     except Exception as exception:
         return Response({'error': str(exception)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
